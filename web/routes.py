@@ -36,6 +36,7 @@ log = logging.getLogger(__name__)
 _JOB_FILES = frozenset(
     {
         "result.png",
+        "mask_raw.png",
         "mask.png",
         "detections.json",
         "uncertainty.png",
@@ -68,6 +69,7 @@ def _build_job_view(job_id: str, upload_root: Path) -> tuple[Path, dict[str, boo
     artifacts: dict[str, bool] = {}
     for name in (
         "result.png",
+        "mask_raw.png",
         "mask.png",
         "uncertainty.png",
         "input_preview.png",

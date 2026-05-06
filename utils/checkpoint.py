@@ -45,5 +45,5 @@ def load_checkpoint(
     model.load_state_dict(ckpt["model_state_dict"])
     if optimizer is not None and "optimizer_state_dict" in ckpt:
         optimizer.load_state_dict(ckpt["optimizer_state_dict"])
-    print(f"[ckpt] loaded ← {path}  (epoch {ckpt.get('epoch', '?')})")
+    print(f"[ckpt] loaded <- {path}  (epoch {ckpt.get('epoch', '?')})")
     return ckpt

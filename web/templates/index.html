@@ -19,7 +19,7 @@
         enctype="multipart/form-data"
         data-max-mb="{{ (config.MAX_CONTENT_LENGTH / (1024*1024))|int }}">
     <div id="dropzone" class="dropzone" tabindex="0" aria-label="Drop image or activate to browse">
-      <input type="file" name="image" id="file-input" accept=".png,.jpg,.jpeg,.tif,.tiff,image/png,image/jpeg,image/tiff" hidden required>
+      <input type="file" name="image" id="file-input" accept=".png,.jpg,.jpeg,.tif,.tiff,image/png,image/jpeg,image/tiff" hidden>
       <p class="dropzone-text"><strong>Drop an image here</strong> or click to choose a file.</p>
       <p class="hint">Max size: {{ (config.MAX_CONTENT_LENGTH / (1024*1024))|int }} MB.</p>
     </div>
@@ -68,11 +68,19 @@
       </a>
     </figure>
     {% endif %}
+    {% if artifacts.get('mask_raw.png') %}
+    <figure>
+      <figcaption>Semantic mask (Raw)</figcaption>
+      <a href="{{ url_for('main.job_file', job_id=job_id, filename='mask_raw.png') }}">
+        <img src="{{ url_for('main.job_file', job_id=job_id, filename='mask_raw.png') }}" alt="Raw U-Net semantic mask">
+      </a>
+    </figure>
+    {% endif %}
     {% if artifacts.get('mask.png') %}
     <figure>
-      <figcaption>Semantic mask</figcaption>
+      <figcaption>Semantic mask (Cleaned)</figcaption>
       <a href="{{ url_for('main.job_file', job_id=job_id, filename='mask.png') }}">
-        <img src="{{ url_for('main.job_file', job_id=job_id, filename='mask.png') }}" alt="U-Net semantic mask">
+        <img src="{{ url_for('main.job_file', job_id=job_id, filename='mask.png') }}" alt="Cleaned U-Net semantic mask">
       </a>
     </figure>
     {% endif %}

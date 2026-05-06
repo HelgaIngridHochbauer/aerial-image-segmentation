@@ -6,7 +6,7 @@ Expected layout (under the kagglehub cache root):
     <cache>/patches/Labels/   RGB annotation masks (palette below)
 
 Class palette (from config.yaml → unet.class_info):
-    0 impervious_surface  (255,255,255)
+    0 roads/pavement      (255,255,255)
     1 building            (  0,  0,255)
     2 low_vegetation      (  0,255,255)
     3 tree                (  0,255,  0)

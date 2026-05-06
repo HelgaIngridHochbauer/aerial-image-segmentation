@@ -64,8 +64,9 @@ Per job (under ``web/uploads/<uuid>/``) the UI may show ``out/input_preview.png`
 ``out/class_mix.png``, ``out/yolo_analytics.png``, and ``out/crops/crop_NN.png``
 in addition to the CLI outputs above.
 
-Optional: set ``WEB_CLEAR_UPLOADS_ON_START=1`` to delete existing contents of
-the upload directory each time the app starts (default off; useful for dev).
+The app **clears** ``web/uploads/`` on each start so old jobs are not reused after
+a restart. Set ``WEB_KEEP_UPLOADS_ON_START=1`` only if you need to preserve uploads
+across restarts (e.g. debugging).
 
 **Production:** use a **single** worker so only one inference uses the GPU at a time:
 
@@ -288,6 +289,15 @@ Writes artifacts to ``results/inference/``:
 * ``mask.png`` — colorized 6-class semantic segmentation (full resolution).
 * ``uncertainty.png`` — U-Net per-pixel entropy heatmap (colormap PNG).
 * ``result.png`` — the input image with the mask overlay and OBB polygons.
+
+Morphological Post-Processing
+-----------------------------
+
+The raw U-Net semantic masks are automatically cleaned at inference time using targeted OpenCV operations:
+
+* **Class-Specific Kernels:** Buildings use 7x7 rectangular kernels, vegetation uses 5x5 elliptical kernels (to preserve organic shapes), and cars use 3x3 rectangular kernels.
+* **Geometric Filtering:** The pipeline extracts contours of all buildings. Highly elongated or non-compact footprints (e.g., aspect ratio > 7.0) are mathematically filtered out and reclassified as roads to fix model misclassifications.
+* **Car-Overlap Heuristic:** To prevent roads with vehicles on them from being misclassified as buildings, any building footprint containing U-Net car pixels is instantly reverted to the ``roads/pavement`` class.
 
 
 Web UI (Flask)

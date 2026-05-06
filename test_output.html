@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Run inference | URBAN-SYNAPSE</title>
+  <link rel="stylesheet" href="/static/css/app.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a href="/" class="brand">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span class="brand-text">URBAN-SYNAPSE</span>
+      </a>
+      <nav class="nav">
+        <a href="/">Run inference</a>
+        <a href="/training">Previous results</a>
+        <a href="/about">About</a>
+      </nav>
+    </div>
+  </header>
+  <main class="wrap main">
+    
+<section class="hero panel">
+  <p class="eyebrow">Geo-AI Inference Platform</p>
+  <h1>URBAN-SYNAPSE</h1>
+  <p class="lead"> Upload an image and generate semantic masks, oriented detections, uncertainty maps, and analytics in one flow.</p>
+</section>
+
+
+
+<section class="panel">
+  <h2>Run inference</h2>
+  <form id="infer-form"
+        action="/infer"
+        method="post"
+        enctype="multipart/form-data"
+        data-max-mb="50">
+    <div id="dropzone" class="dropzone" tabindex="0" aria-label="Drop image or activate to browse">
+      <input type="file" name="image" id="file-input" accept=".png,.jpg,.jpeg,.tif,.tiff,image/png,image/jpeg,image/tiff" hidden required>
+      <p class="dropzone-text"><strong>Drop an image here</strong> or click to choose a file.</p>
+      <p class="hint">Max size: 50 MB.</p>
+    </div>
+
+    <fieldset class="params">
+      <legend>Optional parameters</legend>
+      <p class="hint">Leave blank to use values from <code>config.yaml</code>.</p>
+      <div class="grid-2">
+        <label>Confidence threshold
+          <input type="text" name="conf_threshold" placeholder="0.25" autocomplete="off">
+        </label>
+        <label>IoU threshold
+          <input type="text" name="iou_threshold" placeholder="0.45" autocomplete="off">
+        </label>
+        <label>Mask alpha
+          <input type="text" name="mask_alpha" placeholder="0.45" autocomplete="off">
+        </label>
+        <label>Box thickness (px)
+          <input type="text" name="box_thickness" placeholder="2" autocomplete="off">
+        </label>
+      </div>
+    </fieldset>
+
+    <button type="submit" class="btn primary">Run models</button>
+  </form>
+</section>
+
+
+<section class="panel results">
+  <h2>Results</h2>
+  <p class="hint">Job ID: <code>5ffe30e9-8571-4e74-bd6f-96f7a0388ae0</code></p>
+  <div class="results-grid figures">
+    
+    <figure>
+      <figcaption>Input</figcaption>
+      <a href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/input_preview.png">
+        <img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/input_preview.png" alt="Uploaded input preview">
+      </a>
+    </figure>
+    
+    
+    <figure>
+      <figcaption>Composite</figcaption>
+      <a href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/result.png">
+        <img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/result.png" alt="Composite: mask overlay and detections">
+      </a>
+    </figure>
+    
+    
+    <figure>
+      <figcaption>Semantic mask</figcaption>
+      <a href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/mask.png">
+        <img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/mask.png" alt="U-Net semantic mask">
+      </a>
+    </figure>
+    
+    
+    <figure>
+      <figcaption>U-Net uncertainty</figcaption>
+      <a href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/uncertainty.png">
+        <img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/uncertainty.png" alt="U-Net entropy heatmap">
+      </a>
+    </figure>
+    
+  </div>
+
+  <div class="analytics-row figures">
+    
+    <figure class="analytics-fig">
+      <figcaption>Class mix</figcaption>
+      <a href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/class_mix.png">
+        <img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/class_mix.png" alt="Histogram of U-Net classes in mask">
+      </a>
+    </figure>
+    
+    
+    <figure class="analytics-fig wide">
+      <figcaption>YOLO analytics</figcaption>
+      <a href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/yolo_analytics.png">
+        <img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/yolo_analytics.png" alt="YOLO counts, confidence, centers">
+      </a>
+    </figure>
+    
+  </div>
+
+  
+  <h3>Detection crops</h3>
+  <div class="crops-strip">
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_00.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_00.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_01.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_01.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_02.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_02.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_03.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_03.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_04.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_04.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_05.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_05.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_06.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_06.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_07.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_07.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_08.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_08.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_09.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_09.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_10.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_10.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_100.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_100.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_101.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_101.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_102.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_102.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_103.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_103.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_11.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_11.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_12.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_12.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_13.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_13.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_14.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_14.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_15.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_15.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_16.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_16.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_17.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_17.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_18.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_18.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_19.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_19.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_20.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_20.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_21.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_21.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_22.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_22.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_23.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_23.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_24.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_24.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_25.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_25.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_26.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_26.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_27.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_27.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_28.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_28.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_29.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_29.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_30.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_30.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_31.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_31.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_32.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_32.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_33.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_33.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_34.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_34.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_35.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_35.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_36.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_36.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_37.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_37.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_38.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_38.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_39.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_39.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_40.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_40.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_41.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_41.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_42.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_42.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_43.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_43.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_44.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_44.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_45.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_45.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_46.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_46.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_47.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_47.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_48.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_48.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_49.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_49.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_50.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_50.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_51.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_51.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_52.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_52.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_53.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_53.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_54.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_54.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_55.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_55.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_56.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_56.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_57.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_57.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_58.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_58.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_59.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_59.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_60.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_60.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_61.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_61.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_62.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_62.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_63.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_63.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_64.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_64.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_65.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_65.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_66.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_66.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_67.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_67.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_68.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_68.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_69.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_69.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_70.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_70.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_71.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_71.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_72.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_72.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_73.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_73.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_74.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_74.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_75.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_75.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_76.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_76.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_77.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_77.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_78.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_78.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_79.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_79.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_80.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_80.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_81.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_81.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_82.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_82.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_83.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_83.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_84.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_84.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_85.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_85.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_86.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_86.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_87.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_87.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_88.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_88.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_89.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_89.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_90.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_90.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_91.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_91.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_92.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_92.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_93.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_93.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_94.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_94.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_95.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_95.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_96.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_96.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_97.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_97.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_98.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_98.png" alt="Detection crop"></a>
+    
+    <a class="crop-thumb" href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_99.png"><img src="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/crops/crop_99.png" alt="Detection crop"></a>
+    
+  </div>
+  
+
+  <p><a href="/jobs/5ffe30e9-8571-4e74-bd6f-96f7a0388ae0/detections.json" class="btn secondary">Download detections.json</a></p>
+
+  <h3>Class legend (U-Net)</h3>
+  <table class="table">
+    <thead><tr><th>Class</th><th>RGB</th></tr></thead>
+    <tbody>
+      
+      <tr>
+        <td>impervious_surface</td>
+        <td><span class="swatch" style="--rgb: 255,255,255"></span> 255, 255, 255</td>
+      </tr>
+      
+      <tr>
+        <td>building</td>
+        <td><span class="swatch" style="--rgb: 0,0,255"></span> 0, 0, 255</td>
+      </tr>
+      
+      <tr>
+        <td>low_vegetation</td>
+        <td><span class="swatch" style="--rgb: 0,255,255"></span> 0, 255, 255</td>
+      </tr>
+      
+      <tr>
+        <td>tree</td>
+        <td><span class="swatch" style="--rgb: 0,255,0"></span> 0, 255, 0</td>
+      </tr>
+      
+      <tr>
+        <td>car</td>
+        <td><span class="swatch" style="--rgb: 255,255,0"></span> 255, 255, 0</td>
+      </tr>
+      
+      <tr>
+        <td>clutter</td>
+        <td><span class="swatch" style="--rgb: 255,0,0"></span> 255, 0, 0</td>
+      </tr>
+      
+    </tbody>
+  </table>
+
+  
+  <h3>Detections (YOLO)</h3>
+  
+  <div class="table-scroll">
+    <table class="table">
+      <thead>
+        <tr><th>Class</th><th>Confidence</th><th>Corners (x, y)</th></tr>
+      </thead>
+      <tbody>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.919</td>
+          <td class="mono">[[893.2146606445312, 639.8682861328125], [917.6614379882812, 584.6185302734375], [808.5374145507812, 536.3336181640625], [784.0906372070312, 591.5833740234375]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.910</td>
+          <td class="mono">[[1826.149169921875, 3244.963623046875], [1869.99072265625, 3206.895751953125], [1789.78173828125, 3114.521240234375], [1745.940185546875, 3152.589111328125]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.909</td>
+          <td class="mono">[[2031.173828125, 3394.892578125], [2065.21630859375, 3348.51318359375], [1964.933349609375, 3274.9052734375], [1930.890869140625, 3321.28466796875]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.902</td>
+          <td class="mono">[[1289.0633544921875, 3827.782470703125], [1337.9915771484375, 3818.931396484375], [1321.2120361328125, 3726.172607421875], [1272.2838134765625, 3735.023681640625]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.899</td>
+          <td class="mono">[[892.9895629882812, 2573.238525390625], [951.2560424804688, 2562.797607421875], [930.5336303710938, 2447.155029296875], [872.2671508789062, 2457.595947265625]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.898</td>
+          <td class="mono">[[1817.5814208984375, 528.9046020507812], [1870.4598388671875, 427.91546630859375], [1820.7747802734375, 401.900146484375], [1767.8963623046875, 502.8892822265625]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.897</td>
+          <td class="mono">[[547.1172485351562, 1527.4207763671875], [611.6542358398438, 1441.4107666015625], [568.4246215820312, 1408.9737548828125], [503.88763427734375, 1494.9837646484375]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.896</td>
+          <td class="mono">[[1979.449951171875, 1185.5731201171875], [2007.53369140625, 1132.3699951171875], [1907.151123046875, 1079.3822021484375], [1879.0673828125, 1132.5853271484375]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.895</td>
+          <td class="mono">[[1640.1728515625, 848.6427001953125], [1685.8203125, 744.663818359375], [1632.912353515625, 721.4368896484375], [1587.264892578125, 825.415771484375]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.895</td>
+          <td class="mono">[[679.3565673828125, 232.2388458251953], [709.5048828125, 176.6688690185547], [604.9329833984375, 119.93563079833984], [574.78466796875, 175.50559997558594]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.890</td>
+          <td class="mono">[[748.467041015625, 1742.285888671875], [772.85107421875, 1636.783935546875], [716.1558837890625, 1623.68017578125], [691.7718505859375, 1729.18212890625]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.889</td>
+          <td class="mono">[[1066.9154052734375, 1928.7889404296875], [1067.9093017578125, 1823.6461181640625], [1010.6365356445312, 1823.1048583984375], [1009.6427612304688, 1928.2476806640625]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.885</td>
+          <td class="mono">[[663.4623413085938, 527.8147583007812], [688.4067993164062, 483.8288879394531], [601.8667602539062, 434.7519836425781], [576.9223022460938, 478.7378845214844]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.884</td>
+          <td class="mono">[[647.1336059570312, 2869.302490234375], [701.4186401367188, 2853.551513671875], [665.0817260742188, 2728.317138671875], [610.7966918945312, 2744.068115234375]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.884</td>
+          <td class="mono">[[627.552978515625, 348.2428283691406], [655.52734375, 303.2102966308594], [560.119140625, 243.94229125976562], [532.144775390625, 288.9748229980469]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.881</td>
+          <td class="mono">[[890.0755615234375, 2075.03515625], [948.32666015625, 2071.541015625], [940.58740234375, 1942.5284423828125], [882.3363037109375, 1946.0228271484375]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.878</td>
+          <td class="mono">[[1587.4417724609375, 2699.48583984375], [1634.3421630859375, 2679.56787109375], [1594.3677978515625, 2585.4404296875], [1547.4674072265625, 2605.3583984375]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.878</td>
+          <td class="mono">[[1222.2354736328125, 2238.541748046875], [1223.0482177734375, 2128.577392578125], [1170.4195556640625, 2128.188232421875], [1169.6068115234375, 2238.152587890625]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.875</td>
+          <td class="mono">[[1769.14892578125, 3010.4130859375], [1810.46630859375, 2981.2861328125], [1741.291259765625, 2883.15869140625], [1699.973876953125, 2912.28564453125]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.875</td>
+          <td class="mono">[[923.6333618164062, 2406.775390625], [975.0700073242188, 2402.880859375], [966.5276489257812, 2290.0595703125], [915.0910034179688, 2293.9541015625]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.875</td>
+          <td class="mono">[[1675.2574462890625, 3072.437744140625], [1715.5540771484375, 3042.286376953125], [1649.1483154296875, 2953.536376953125], [1608.8516845703125, 2983.687744140625]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.874</td>
+          <td class="mono">[[1115.172119140625, 618.381591796875], [1158.99365234375, 516.2967529296875], [1107.62890625, 494.2475891113281], [1063.807373046875, 596.3323974609375]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.873</td>
+          <td class="mono">[[727.2141723632812, 664.6181030273438], [757.2636108398438, 607.5697631835938], [643.9260864257812, 547.8707885742188], [613.8766479492188, 604.9191284179688]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.873</td>
+          <td class="mono">[[1352.847900390625, 3058.13134765625], [1407.486083984375, 3044.41259765625], [1378.059326171875, 2927.21533203125], [1323.421142578125, 2940.93408203125]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.865</td>
+          <td class="mono">[[1008.0895385742188, 3866.950927734375], [1065.915771484375, 3852.464111328125], [1039.294677734375, 3746.200927734375], [981.4683837890625, 3760.687744140625]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.858</td>
+          <td class="mono">[[1275.277587890625, 1926.564697265625], [1328.525146484375, 1925.9287109375], [1327.259521484375, 1819.96826171875], [1274.011962890625, 1820.604248046875]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.856</td>
+          <td class="mono">[[1579.1417236328125, 3742.98046875], [1628.2318115234375, 3733.5146484375], [1608.1119384765625, 3629.17333984375], [1559.0218505859375, 3638.63916015625]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.856</td>
+          <td class="mono">[[1131.74951171875, 2877.59619140625], [1191.091552734375, 2860.38427734375], [1160.1630859375, 2753.7509765625], [1100.821044921875, 2770.962890625]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.848</td>
+          <td class="mono">[[1308.3829345703125, 1527.9776611328125], [1323.9910888671875, 1410.7803955078125], [1256.3209228515625, 1401.7681884765625], [1240.7127685546875, 1518.9654541015625]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.844</td>
+          <td class="mono">[[2007.7454833984375, 126.47022247314453], [2055.38037109375, 20.799949645996094], [1993.5352783203125, -7.07916259765625], [1945.9002685546875, 98.59111022949219]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.844</td>
+          <td class="mono">[[1366.7154541015625, 2466.78125], [1428.3114013671875, 2450.30224609375], [1397.8951416015625, 2336.61083984375], [1336.2991943359375, 2353.08984375]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.843</td>
+          <td class="mono">[[2192.181396484375, 3505.44775390625], [2223.593505859375, 3458.955078125], [2118.466552734375, 3387.92724609375], [2087.054443359375, 3434.419921875]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.842</td>
+          <td class="mono">[[1663.8199462890625, 664.4228515625], [1712.3658447265625, 566.33935546875], [1659.8304443359375, 540.3372802734375], [1611.2845458984375, 638.4207763671875]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.840</td>
+          <td class="mono">[[1589.0635986328125, 1087.8642578125], [1645.3258056640625, 981.4631958007812], [1587.6190185546875, 950.9492797851562], [1531.3568115234375, 1057.350341796875]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.832</td>
+          <td class="mono">[[1405.8310546875, 1398.6414794921875], [1416.84765625, 1277.3013916015625], [1352.161865234375, 1271.4285888671875], [1341.145263671875, 1392.7686767578125]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.830</td>
+          <td class="mono">[[1219.9901123046875, 1540.7276611328125], [1237.4498291015625, 1452.8868408203125], [1175.4288330078125, 1440.5592041015625], [1157.9691162109375, 1528.4000244140625]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.827</td>
+          <td class="mono">[[1950.589599609375, 364.2850341796875], [2001.37841796875, 253.35302734375], [1935.9697265625, 223.40643310546875], [1885.180908203125, 334.33843994140625]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.825</td>
+          <td class="mono">[[1008.5830688476562, 2375.3056640625], [1068.9454345703125, 2369.71435546875], [1057.8773193359375, 2250.23046875], [997.5149536132812, 2255.82177734375]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.823</td>
+          <td class="mono">[[492.0526123046875, 2603.69384765625], [528.2103271484375, 2567.435546875], [445.32257080078125, 2484.77734375], [409.16485595703125, 2521.03564453125]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.822</td>
+          <td class="mono">[[1169.960693359375, 3529.410400390625], [1220.888427734375, 3518.117431640625], [1199.63671875, 3422.279541015625], [1148.708984375, 3433.572509765625]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.810</td>
+          <td class="mono">[[1751.7464599609375, 716.2385864257812], [1789.9549560546875, 624.5856323242188], [1740.8221435546875, 604.1029663085938], [1702.6136474609375, 695.7559204101562]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.809</td>
+          <td class="mono">[[846.0119018554688, 1374.64990234375], [864.4850463867188, 1282.890869140625], [812.3926391601562, 1272.403564453125], [793.9194946289062, 1364.16259765625]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.808</td>
+          <td class="mono">[[1530.6724853515625, 574.1760864257812], [1571.7723388671875, 479.17364501953125], [1517.8201904296875, 455.8329162597656], [1476.7203369140625, 550.8353271484375]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.805</td>
+          <td class="mono">[[1512.1502685546875, 2816.51513671875], [1570.5291748046875, 2792.07666015625], [1522.2740478515625, 2676.80517578125], [1463.8951416015625, 2701.24365234375]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.803</td>
+          <td class="mono">[[1509.3878173828125, 3564.654541015625], [1570.0750732421875, 3555.986572265625], [1552.7098388671875, 3434.405029296875], [1492.0225830078125, 3443.072998046875]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.802</td>
+          <td class="mono">[[1440.121826171875, 125.14430236816406], [1475.4677734375, 21.696086883544922], [1423.04443359375, 3.7842369079589844], [1387.698486328125, 107.23245239257812]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.799</td>
+          <td class="mono">[[577.7808837890625, 595.89306640625], [612.023193359375, 537.1767578125], [493.926513671875, 468.3049011230469], [459.6842041015625, 527.021240234375]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.798</td>
+          <td class="mono">[[1433.5343017578125, 1701.119140625], [1434.7113037109375, 1590.72802734375], [1380.1678466796875, 1590.146484375], [1378.9908447265625, 1700.53759765625]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.796</td>
+          <td class="mono">[[1523.647705078125, 904.518310546875], [1556.40087890625, 801.85205078125], [1505.891357421875, 785.73828125], [1473.13818359375, 888.404541015625]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.795</td>
+          <td class="mono">[[1163.66552734375, 3012.36328125], [1228.681884765625, 2998.48876953125], [1205.893310546875, 2891.7001953125], [1140.876953125, 2905.57470703125]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.792</td>
+          <td class="mono">[[1299.60693359375, 414.21783447265625], [1343.099609375, 306.63763427734375], [1291.7158203125, 285.86407470703125], [1248.22314453125, 393.44427490234375]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.787</td>
+          <td class="mono">[[1283.091796875, 282.0470275878906], [1316.5869140625, 174.3329315185547], [1258.5439453125, 156.28379821777344], [1225.048828125, 263.9978942871094]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.775</td>
+          <td class="mono">[[977.4622192382812, 178.93344116210938], [1011.2672729492188, 124.85760498046875], [915.0211791992188, 64.69024658203125], [881.2161254882812, 118.76608276367188]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.773</td>
+          <td class="mono">[[1451.6905517578125, 2382.098388671875], [1508.2315673828125, 2369.417236328125], [1481.4844970703125, 2250.161865234375], [1424.9434814453125, 2262.843017578125]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.771</td>
+          <td class="mono">[[1350.905029296875, 1694.9356689453125], [1355.76171875, 1583.0069580078125], [1296.52880859375, 1580.4366455078125], [1291.672119140625, 1692.3653564453125]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.769</td>
+          <td class="mono">[[1194.74951171875, 1990.406005859375], [1247.753662109375, 1990.189208984375], [1247.335205078125, 1887.923828125], [1194.3310546875, 1888.140625]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.768</td>
+          <td class="mono">[[1214.3336181640625, 2478.756103515625], [1277.2593994140625, 2467.907470703125], [1256.9132080078125, 2349.893798828125], [1193.9874267578125, 2360.742431640625]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.757</td>
+          <td class="mono">[[1002.827880859375, 2097.75830078125], [1055.135498046875, 2095.5673828125], [1051.109375, 1999.454345703125], [998.8017578125, 2001.6455078125]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.757</td>
+          <td class="mono">[[1617.910400390625, 59.748287200927734], [1642.6748046875, 4.347957611083984], [1591.53564453125, -18.511600494384766], [1566.771240234375, 36.888729095458984]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.755</td>
+          <td class="mono">[[371.4946594238281, 491.2374572753906], [401.2732849121094, 438.8227844238281], [300.1607360839844, 381.3771667480469], [270.3821105957031, 433.7918395996094]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.752</td>
+          <td class="mono">[[1875.9832763671875, 68.923583984375], [1911.0445556640625, 6.617826461791992], [1868.2054443359375, -17.489120483398438], [1833.1441650390625, 44.8166389465332]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.742</td>
+          <td class="mono">[[1153.1192626953125, 1927.1705322265625], [1153.1278076171875, 1823.1544189453125], [1098.0667724609375, 1823.1500244140625], [1098.0582275390625, 1927.1661376953125]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.739</td>
+          <td class="mono">[[1017.9675903320312, 2792.445068359375], [1070.8773193359375, 2779.878662109375], [1045.5938720703125, 2673.425537109375], [992.6841430664062, 2685.991943359375]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.733</td>
+          <td class="mono">[[1380.1392822265625, 71.35360717773438], [1404.9281005859375, 0.4270057678222656], [1357.3909912109375, -16.18720054626465], [1332.6021728515625, 54.73939514160156]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.733</td>
+          <td class="mono">[[860.82958984375, 718.6953735351562], [882.7535400390625, 666.2332153320312], [793.4376220703125, 628.9081420898438], [771.513671875, 681.3703002929688]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.727</td>
+          <td class="mono">[[1386.567138671875, 2074.697998046875], [1447.440185546875, 2069.225341796875], [1436.2724609375, 1945.000732421875], [1375.3994140625, 1950.47314453125]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.723</td>
+          <td class="mono">[[1267.3662109375, 3323.83056640625], [1331.236572265625, 3312.87744140625], [1315.0693359375, 3218.6005859375], [1251.198974609375, 3229.5537109375]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.712</td>
+          <td class="mono">[[1254.174072265625, 1798.29638671875], [1259.884521484375, 1677.329345703125], [1203.42333984375, 1674.6640625], [1197.712890625, 1795.631103515625]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.707</td>
+          <td class="mono">[[1511.3502197265625, 1327.7021484375], [1532.4259033203125, 1215.462646484375], [1467.0269775390625, 1203.182373046875], [1445.9512939453125, 1315.421875]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.706</td>
+          <td class="mono">[[1250.6270751953125, 2733.169189453125], [1310.7220458984375, 2722.633544921875], [1293.5953369140625, 2624.945556640625], [1233.5003662109375, 2635.481201171875]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.700</td>
+          <td class="mono">[[1754.4705810546875, 403.5090026855469], [1807.1641845703125, 297.6552429199219], [1751.3350830078125, 269.8637390136719], [1698.6414794921875, 375.7174987792969]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.692</td>
+          <td class="mono">[[1468.45458984375, 3403.4560546875], [1528.713623046875, 3389.43212890625], [1503.98095703125, 3283.1591796875], [1443.721923828125, 3297.18310546875]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.679</td>
+          <td class="mono">[[1200.1483154296875, 1606.8818359375], [1217.7235107421875, 1521.70458984375], [1161.0330810546875, 1510.00732421875], [1143.4578857421875, 1595.1845703125]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.666</td>
+          <td class="mono">[[1301.2421875, 2136.191162109375], [1356.969970703125, 2131.708251953125], [1347.21435546875, 2010.433837890625], [1291.486572265625, 2014.916748046875]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.640</td>
+          <td class="mono">[[1343.7191162109375, 3579.12158203125], [1399.4031982421875, 3569.509765625], [1385.4593505859375, 3488.73046875], [1329.7752685546875, 3498.34228515625]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.635</td>
+          <td class="mono">[[1948.2540283203125, 67.13623809814453], [1985.7259521484375, -6.1918487548828125], [1936.6124267578125, -31.289756774902344], [1899.1405029296875, 42.038330078125]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.629</td>
+          <td class="mono">[[1184.041259765625, 2731.174560546875], [1237.564697265625, 2722.348876953125], [1225.917724609375, 2651.715087890625], [1172.394287109375, 2660.540771484375]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.625</td>
+          <td class="mono">[[1362.30419921875, 3395.407470703125], [1424.553466796875, 3384.363037109375], [1405.680908203125, 3277.991455078125], [1343.431640625, 3289.035888671875]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.619</td>
+          <td class="mono">[[1086.005126953125, 2768.503662109375], [1149.244384765625, 2753.615966796875], [1121.70166015625, 2636.621337890625], [1058.46240234375, 2651.509033203125]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.613</td>
+          <td class="mono">[[2163.0546875, 1375.68505859375], [2205.7099609375, 1318.184814453125], [2117.11083984375, 1252.459228515625], [2074.45556640625, 1309.95947265625]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.612</td>
+          <td class="mono">[[1408.1600341796875, 3226.524658203125], [1471.6707763671875, 3218.064208984375], [1457.7532958984375, 3113.587646484375], [1394.2425537109375, 3122.048095703125]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.610</td>
+          <td class="mono">[[77.91317749023438, 66.77536010742188], [103.30690002441406, 20.77660369873047], [15.610183715820312, -27.636577606201172], [-9.783538818359375, 18.362178802490234]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.610</td>
+          <td class="mono">[[1259.2230224609375, 3008.06298828125], [1316.3890380859375, 2994.84619140625], [1294.2135009765625, 2898.9306640625], [1237.0474853515625, 2912.1474609375]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.603</td>
+          <td class="mono">[[1059.0693359375, 2616.972412109375], [1118.17236328125, 2605.844482421875], [1096.72412109375, 2491.924560546875], [1037.62109375, 2503.052490234375]]</td>
+        </tr>
+        
+        <tr>
+          <td>large-vehicle</td>
+          <td>0.579</td>
+          <td class="mono">[[408.169189453125, 421.4034729003906], [443.06036376953125, 352.3249816894531], [286.25433349609375, 273.1230163574219], [251.36314392089844, 342.2015075683594]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.539</td>
+          <td class="mono">[[1608.3505859375, 3857.64990234375], [1659.99658203125, 3847.11767578125], [1642.1220703125, 3759.46923828125], [1590.47607421875, 3770.00146484375]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.519</td>
+          <td class="mono">[[1438.3699951171875, 1141.67626953125], [1479.1961669921875, 1052.78515625], [1433.2764892578125, 1031.69482421875], [1392.4503173828125, 1120.5859375]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.510</td>
+          <td class="mono">[[1134.2384033203125, 1596.2310791015625], [1154.7254638671875, 1492.0316162109375], [1087.5396728515625, 1478.8218994140625], [1067.0526123046875, 1583.0213623046875]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.501</td>
+          <td class="mono">[[1513.057861328125, 3865.19921875], [1568.51806640625, 3856.6328125], [1555.353515625, 3771.40380859375], [1499.893310546875, 3779.97021484375]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.487</td>
+          <td class="mono">[[1627.66796875, 3908.21337890625], [1680.075927734375, 3897.07861328125], [1666.15234375, 3831.54443359375], [1613.744384765625, 3842.67919921875]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.465</td>
+          <td class="mono">[[409.6143493652344, 416.8659973144531], [442.7063293457031, 349.5200500488281], [291.2875671386719, 275.1169738769531], [258.1955871582031, 342.4629211425781]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.457</td>
+          <td class="mono">[[1438.8177490234375, 2199.576904296875], [1497.8458251953125, 2189.282958984375], [1477.2344970703125, 2071.091064453125], [1418.2064208984375, 2081.385009765625]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.401</td>
+          <td class="mono">[[1955.5008544921875, 3218.518798828125], [1992.9053955078125, 3186.058349609375], [1935.8870849609375, 3120.355712890625], [1898.4825439453125, 3152.816162109375]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.394</td>
+          <td class="mono">[[1696.279296875, 1141.714111328125], [1725.09814453125, 1059.205322265625], [1665.6015625, 1038.42431640625], [1636.78271484375, 1120.93310546875]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.335</td>
+          <td class="mono">[[1466.5423583984375, 3686.76318359375], [1515.1197509765625, 3678.68212890625], [1500.1033935546875, 3588.41455078125], [1451.5260009765625, 3596.49560546875]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.325</td>
+          <td class="mono">[[1723.017578125, 4007.433349609375], [1739.006103515625, 3959.819091796875], [1673.752197265625, 3937.907470703125], [1657.763671875, 3985.521728515625]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.318</td>
+          <td class="mono">[[1218.378173828125, 3470.06201171875], [1277.24267578125, 3459.7294921875], [1262.0791015625, 3373.3408203125], [1203.214599609375, 3383.67333984375]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.302</td>
+          <td class="mono">[[1496.0042724609375, 4016.82177734375], [1541.0777587890625, 3992.55126953125], [1517.1038818359375, 3948.02880859375], [1472.0303955078125, 3972.29931640625]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.286</td>
+          <td class="mono">[[1591.6583251953125, 4020.82421875], [1629.3277587890625, 3990.03759765625], [1593.4549560546875, 3946.14453125], [1555.7855224609375, 3976.93115234375]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.279</td>
+          <td class="mono">[[1094.7371826171875, 96.15362548828125], [1119.0462646484375, 50.327205657958984], [1033.1351318359375, 4.754817962646484], [1008.8260498046875, 50.581241607666016]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.268</td>
+          <td class="mono">[[1422.8201904296875, 3837.834228515625], [1481.7147216796875, 3826.918701171875], [1468.3670654296875, 3754.902099609375], [1409.4725341796875, 3765.817626953125]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.267</td>
+          <td class="mono">[[1422.4769287109375, 2433.060546875], [1475.6336669921875, 2419.00439453125], [1444.9603271484375, 2303.00732421875], [1391.8035888671875, 2317.0634765625]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.266</td>
+          <td class="mono">[[1025.2376708984375, 3975.913818359375], [1070.2757568359375, 3968.455810546875], [1058.2042236328125, 3895.558349609375], [1013.1661376953125, 3903.016357421875]]</td>
+        </tr>
+        
+        <tr>
+          <td>small-vehicle</td>
+          <td>0.254</td>
+          <td class="mono">[[2163.0927734375, 669.069580078125], [2203.09521484375, 614.446044921875], [2121.43359375, 554.6424560546875], [2081.43115234375, 609.2659912109375]]</td>
+        </tr>
+        
+      </tbody>
+    </table>
+  </div>
+  
+  
+</section>
+
+
+<script src="/static/js/upload.js"></script>
+
+  </main>
+  <footer class="site-footer wrap">
+    <p>URBAN-SYNAPSE blends neural segmentation and geospatial OBB detection into a single modern inference workspace.</p>
+  </footer>
+</body>
+</html>
