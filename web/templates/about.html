@@ -6,4 +6,28 @@
   <h1>About URBAN-SYNAPSE</h1>
   <p class="lead">The URBAN-SYNAPSE project focuses on the automated detection of vehicles, buildings, and roads through high-density aerial imagery. As drone technology advances, there is an increasing demand for systems that can provide real-time telemetry and precise mapping of complex urban environments.</p>
 </section>
+
+<section class="panel">
+  <h2>Our Models & Datasets</h2>
+  <div class="grid-2">
+    <div>
+      <h3>YOLOv8 OBB</h3>
+      <p>Used for precise Oriented Bounding Box detection of vehicles. Trained on the VSAI dataset, allowing for rotation-aware vehicle tracking in highly congested aerial environments.</p>
+    </div>
+    <div>
+      <h3>U-Net Segmentation</h3>
+      <p>A classic semantic segmentation architecture trained on the ISPRS Potsdam dataset. It maps the terrain into 6 main classes: roads/pavement, buildings, low vegetation, trees, cars, and clutter.</p>
+    </div>
+  </div>
+</section>
+
+<section class="panel">
+  <h2>Advanced Morphological Post-Processing</h2>
+  <p>To provide production-ready segmentation masks, our pipeline applies intelligent morphological operations directly to the U-Net inference outputs:</p>
+  <ul>
+    <li><strong>Class-Specific Structuring:</strong> Different classes receive tailored kernels. For example, buildings are cleaned with 7x7 rectangular kernels, while vegetation uses 5x5 elliptical kernels to preserve natural, organic shapes.</li>
+    <li><strong>Shape-Based Geometric Filtering:</strong> We analyze the boundaries of every detected building. If a "building" is extremely elongated (aspect ratio > 7.0) or non-compact (circularity < 0.07), it is automatically corrected and reclassified as a road.</li>
+    <li><strong>Cross-Class Overlap Heuristic:</strong> We leverage data from multiple classes. If a car (Class 4) is detected completely inside or on top of a building footprint, our system instantly flags the topological impossibility and reverts the underlying structure to a road.</li>
+  </ul>
+</section>
 {% endblock %}

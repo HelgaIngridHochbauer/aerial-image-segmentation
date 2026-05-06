@@ -290,6 +290,15 @@ Writes artifacts to ``results/inference/``:
 * ``uncertainty.png`` — U-Net per-pixel entropy heatmap (colormap PNG).
 * ``result.png`` — the input image with the mask overlay and OBB polygons.
 
+Morphological Post-Processing
+-----------------------------
+
+The raw U-Net semantic masks are automatically cleaned at inference time using targeted OpenCV operations:
+
+* **Class-Specific Kernels:** Buildings use 7x7 rectangular kernels, vegetation uses 5x5 elliptical kernels (to preserve organic shapes), and cars use 3x3 rectangular kernels.
+* **Geometric Filtering:** The pipeline extracts contours of all buildings. Highly elongated or non-compact footprints (e.g., aspect ratio > 7.0) are mathematically filtered out and reclassified as roads to fix model misclassifications.
+* **Car-Overlap Heuristic:** To prevent roads with vehicles on them from being misclassified as buildings, any building footprint containing U-Net car pixels is instantly reverted to the ``roads/pavement`` class.
+
 
 Web UI (Flask)
 --------------

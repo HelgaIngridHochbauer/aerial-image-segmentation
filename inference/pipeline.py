@@ -183,12 +183,39 @@ def run_inference(
     # --- Morphological Post-Processing ---
     cleaned_mask = np.zeros_like(mask)
     
+    # Pre-compute car mask to identify roads misclassified as buildings
+    car_mask = (mask == 4).astype(np.uint8)
+
     # 1: building
     class_bin = (mask == 1).astype(np.uint8)
     kernel_build = cv2.getStructuringElement(cv2.MORPH_RECT, (7, 7))
     opened = cv2.morphologyEx(class_bin, cv2.MORPH_OPEN, kernel_build)
     closed = cv2.morphologyEx(opened, cv2.MORPH_CLOSE, kernel_build)
-    cleaned_mask[closed == 1] = 1
+
+    contours, _ = cv2.findContours(closed, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    for cnt in contours:
+        area = cv2.contourArea(cnt)
+        if area < 50:
+            cv2.drawContours(cleaned_mask, [cnt], -1, 1, -1)
+            continue
+            
+        rect = cv2.minAreaRect(cnt)
+        (w, h) = rect[1]
+        aspect_ratio = max(w, h) / min(w, h) if min(w, h) > 0 else 0
+        
+        perimeter = cv2.arcLength(cnt, True)
+        circularity = (4 * np.pi * area) / (perimeter * perimeter) if perimeter > 0 else 0
+        
+        # Check car overlap: create a filled mask of this blob's outer boundary
+        blob_mask = np.zeros_like(closed)
+        cv2.drawContours(blob_mask, [cnt], -1, 1, -1)
+        overlaps_car = (blob_mask & car_mask).any()
+
+        # Heuristic for roads: highly elongated, low circularity, OR has a car on it
+        if aspect_ratio > 7.0 or circularity < 0.07 or overlaps_car:
+            pass # Implicitly leave as 0 (roads/pavement)
+        else:
+            cv2.drawContours(cleaned_mask, [cnt], -1, 1, -1)
     
     # 2: low_vegetation, 3: tree
     kernel_veg = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
