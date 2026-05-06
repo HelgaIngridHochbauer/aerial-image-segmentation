@@ -7,7 +7,7 @@ from inference.visualization import colorize_mask, palette_from_class_info
 
 
 CLASS_INFO = [
-    (0, "impervious_surface", 255, 255, 255),
+    (0, "roads/pavement", 255, 255, 255),
     (1, "building", 0, 0, 255),
     (2, "low_vegetation", 0, 255, 255),
     (3, "tree", 0, 255, 0),

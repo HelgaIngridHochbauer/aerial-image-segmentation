@@ -41,7 +41,7 @@ unet:
   train_split: 0.8
   # (id, name, r, g, b) — drives mask decode and inference palette
   class_info:
-    - [0, "impervious_surface", 255, 255, 255]
+    - [0, "roads/pavement", 255, 255, 255]
     - [1, "building",             0,   0, 255]
     - [2, "low_vegetation",       0, 255, 255]
     - [3, "tree",                 0, 255,   0]

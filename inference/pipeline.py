@@ -178,6 +178,42 @@ def run_inference(
         image_size=tuple(cfg.unet.image_size),
     )
 
+    mask_raw = mask.copy()
+
+    # --- Morphological Post-Processing ---
+    cleaned_mask = np.zeros_like(mask)
+    
+    # 1: building
+    class_bin = (mask == 1).astype(np.uint8)
+    kernel_build = cv2.getStructuringElement(cv2.MORPH_RECT, (7, 7))
+    opened = cv2.morphologyEx(class_bin, cv2.MORPH_OPEN, kernel_build)
+    closed = cv2.morphologyEx(opened, cv2.MORPH_CLOSE, kernel_build)
+    cleaned_mask[closed == 1] = 1
+    
+    # 2: low_vegetation, 3: tree
+    kernel_veg = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
+    for c in [2, 3]:
+        class_bin = (mask == c).astype(np.uint8)
+        opened = cv2.morphologyEx(class_bin, cv2.MORPH_OPEN, kernel_veg)
+        closed = cv2.morphologyEx(opened, cv2.MORPH_CLOSE, kernel_veg)
+        cleaned_mask[closed == 1] = c
+
+    # 4: car
+    class_bin = (mask == 4).astype(np.uint8)
+    kernel_car = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
+    opened = cv2.morphologyEx(class_bin, cv2.MORPH_OPEN, kernel_car)
+    closed = cv2.morphologyEx(opened, cv2.MORPH_CLOSE, kernel_car)
+    cleaned_mask[closed == 1] = 4
+    
+    # 5: clutter
+    class_bin = (mask == 5).astype(np.uint8)
+    kernel_clutter = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3))
+    opened = cv2.morphologyEx(class_bin, cv2.MORPH_OPEN, kernel_clutter)
+    closed = cv2.morphologyEx(opened, cv2.MORPH_CLOSE, kernel_clutter)
+    cleaned_mask[closed == 1] = 5
+    
+    mask = cleaned_mask
+
     # --- YOLO --------------------------------------------------------------
     weights_yolo = Path(yolo_weights) if yolo_weights else resolve_path(cfg.inference.yolo_weights)
     detections = _run_yolo(
@@ -198,15 +234,20 @@ def run_inference(
         box_thickness=cfg.inference.box_thickness,
     )
 
+    mask_raw_rgb = palette_rgb[np.clip(mask_raw, 0, palette_rgb.shape[0] - 1)]
+    mask_raw_bgr = cv2.cvtColor(mask_raw_rgb.astype(np.uint8), cv2.COLOR_RGB2BGR)
+
     mask_rgb = palette_rgb[np.clip(mask, 0, palette_rgb.shape[0] - 1)]
     mask_bgr = cv2.cvtColor(mask_rgb.astype(np.uint8), cv2.COLOR_RGB2BGR)
 
     paths = {
+        "mask_raw": out_dir / "mask_raw.png",
         "mask": out_dir / "mask.png",
         "result": out_dir / "result.png",
         "detections": out_dir / "detections.json",
         "uncertainty": out_dir / "uncertainty.png",
     }
+    cv2.imwrite(str(paths["mask_raw"]), mask_raw_bgr)
     cv2.imwrite(str(paths["mask"]), mask_bgr)
     cv2.imwrite(str(paths["result"]), composite_bgr)
     cv2.imwrite(str(paths["uncertainty"]), uncertainty_bgr)

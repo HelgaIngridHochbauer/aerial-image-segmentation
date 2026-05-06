@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Run inference | URBAN-SYNAPSE</title>
+  <link rel="stylesheet" href="/static/css/app.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a href="/" class="brand">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span class="brand-text">URBAN-SYNAPSE</span>
+      </a>
+      <nav class="nav">
+        <a href="/">Run inference</a>
+        <a href="/training">Previous results</a>
+        <a href="/about">About</a>
+      </nav>
+    </div>
+  </header>
+  <main class="wrap main">
+    
+<section class="hero panel">
+  <p class="eyebrow">Geo-AI Inference Platform</p>
+  <h1>URBAN-SYNAPSE</h1>
+  <p class="lead"> Upload an image and generate semantic masks, oriented detections, uncertainty maps, and analytics in one flow.</p>
+</section>
+
+
+
+<section class="panel">
+  <h2>Run inference</h2>
+  <form id="infer-form"
+        action="/infer"
+        method="post"
+        enctype="multipart/form-data"
+        data-max-mb="50">
+    <div id="dropzone" class="dropzone" tabindex="0" aria-label="Drop image or activate to browse">
+      <input type="file" name="image" id="file-input" accept=".png,.jpg,.jpeg,.tif,.tiff,image/png,image/jpeg,image/tiff" hidden>
+      <p class="dropzone-text"><strong>Drop an image here</strong> or click to choose a file.</p>
+      <p class="hint">Max size: 50 MB.</p>
+    </div>
+
+    <fieldset class="params">
+      <legend>Optional parameters</legend>
+      <p class="hint">Leave blank to use values from <code>config.yaml</code>.</p>
+      <div class="grid-2">
+        <label>Confidence threshold
+          <input type="text" name="conf_threshold" placeholder="0.25" autocomplete="off">
+        </label>
+        <label>IoU threshold
+          <input type="text" name="iou_threshold" placeholder="0.45" autocomplete="off">
+        </label>
+        <label>Mask alpha
+          <input type="text" name="mask_alpha" placeholder="0.45" autocomplete="off">
+        </label>
+        <label>Box thickness (px)
+          <input type="text" name="box_thickness" placeholder="2" autocomplete="off">
+        </label>
+      </div>
+    </fieldset>
+
+    <button type="submit" class="btn primary">Run models</button>
+  </form>
+</section>
+
+
+
+<script src="/static/js/upload.js"></script>
+
+  </main>
+  <footer class="site-footer wrap">
+    <p>URBAN-SYNAPSE blends neural segmentation and geospatial OBB detection into a single modern inference workspace.</p>
+  </footer>
+</body>
+</html>
