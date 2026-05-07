@@ -55,3 +55,6 @@ Thumbs.db
 # Flask web UI (uploaded images and job outputs)
 web/uploads/
 instance/
+
+# idk
+.lesshst
