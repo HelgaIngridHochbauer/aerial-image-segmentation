@@ -49,7 +49,15 @@ _JOB_FILES = frozenset(
 )
 _CROP_RE = re.compile(r"^crop_\d+\.png$")
 _TRAINING_FIGURES = frozenset(
-    {"training_yolo.png", "training_unet.png", "inference_composite.png"}
+    {"training_yolo.png", "training_unet.png", "inference_composite.png",
+     "pipeline_overview.png", "unet_architecture.png", "unet_model_summary.png",
+     "unet_weight_distribution.png", "yolo_loss_curves.png",
+     "yolo_metrics_curves.png", "yolo_lr_schedule.png",
+     "yolo_confusion_matrix.png", "yolo_confusion_matrix_norm.png",
+     "yolo_pr_curve.png", "yolo_f1_curve.png", "yolo_results_ultralytics.png",
+     "unet_confusion_matrix.png", "unet_confusion_matrix_norm.png",
+     "unet_pr_curve.png", "unet_f1_curve.png", "unet_loss_curves.png",
+     "unet_lr_schedule.png", "mixed_loss_curves.png", "mixed_metrics_curves.png"}
 )
 
 
@@ -312,6 +320,48 @@ def training():
         detections=None,
         figures=available,
     )
+
+
+@bp.route("/analytics")
+def analytics():
+    root: Path = current_app.config["PROJECT_ROOT"] / "figures"
+    # Regenerate plots on each visit (fast — ~2s) so they reflect latest checkpoints.
+    try:
+        from web.generate_training_plots import generate_all
+        generate_all(root, current_app.config["PROJECT_ROOT"])
+    except Exception:  # noqa: BLE001
+        log.exception("analytics: plot generation failed")
+
+    analytics_figures = [
+        ("pipeline_overview.png", "Dual-Model Inference Pipeline"),
+        ("unet_architecture.png", "U-Net Architecture — Channel Progression"),
+        ("unet_model_summary.png", "U-Net Checkpoint Summary"),
+        ("unet_weight_distribution.png", "U-Net Weight Distribution by Layer Group"),
+        ("unet_loss_curves.png", "U-Net Training vs Validation Losses"),
+        ("unet_lr_schedule.png", "U-Net Learning Rate Schedule"),
+        ("unet_confusion_matrix_norm.png", "U-Net Normalized Confusion Matrix"),
+        ("unet_pr_curve.png", "U-Net Precision-Recall Curve"),
+        ("unet_f1_curve.png", "U-Net F1 Curve"),
+        ("yolo_loss_curves.png", "YOLOv8 Training & Validation Losses"),
+        ("yolo_metrics_curves.png", "YOLOv8 Detection Metrics (P / R / mAP)"),
+        ("yolo_lr_schedule.png", "YOLOv8 Learning Rate Schedule"),
+        ("yolo_confusion_matrix_norm.png", "YOLOv8 Normalized Confusion Matrix"),
+        ("yolo_pr_curve.png", "YOLOv8 Precision-Recall Curve"),
+        ("yolo_f1_curve.png", "YOLOv8 F1 Curve"),
+        ("mixed_loss_curves.png", "Convergence Comparison (YOLO vs U-Net)"),
+        ("mixed_metrics_curves.png", "Performance Overlay (YOLO vs U-Net)"),
+    ]
+
+    available = []
+    for fname, label in analytics_figures:
+        if (root / fname).is_file():
+            available.append({
+                "filename": fname,
+                "label": label,
+                "url": url_for("main.training_figure", filename=fname),
+            })
+
+    return render_template("analytics.html", figures=available)
 
 
 @bp.route("/about")

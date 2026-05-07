@@ -416,3 +416,66 @@ code {
   padding: 0.12rem 0.35rem;
   border-radius: 3px;
 }
+
+/* ── Analytics dashboard ── */
+
+.analytics-section h2 {
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.analytics-full {
+  margin-top: 1rem;
+}
+
+.analytics-full img {
+  max-width: 100%;
+  height: auto;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.analytics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1.25rem;
+  margin-top: 1rem;
+}
+
+.analytics-figure {
+  margin: 0;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.analytics-figure.wide {
+  grid-column: 1 / -1;
+}
+
+.analytics-figure img {
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  display: block;
+  transition: border-color 0.2s ease;
+}
+
+.analytics-figure:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(14, 34, 51, 0.18);
+}
+
+.analytics-figure:hover img {
+  border-color: var(--accent);
+}
+
+.analytics-figure figcaption {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-top: 0.45rem;
+  font-weight: 500;
+  text-align: center;
+}
+

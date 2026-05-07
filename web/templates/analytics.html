@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}Training Analytics{% endblock %}
+{% block content %}
+<section class="hero panel">
+  <p class="eyebrow">Model Intelligence</p>
+  <h1>Training Analytics Dashboard</h1>
+  <p class="lead">Comprehensive visualizations of model training, architecture, and performance metrics for both the U-Net segmentation and YOLOv8 OBB detection pipelines.</p>
+</section>
+
+{% if figures|length == 0 %}
+<section class="panel">
+  <p class="lead">No analytics plots available yet. Run training or ensure checkpoints and results exist in the project.</p>
+  <p class="hint">Expected: <code>results/unet/checkpoints/best.pth</code> and <code>results/yolo/safe/results.csv</code></p>
+</section>
+{% else %}
+
+{# --- Pipeline Overview --- #}
+<section class="panel analytics-section">
+  <h2>🔗 Pipeline Overview</h2>
+  <p class="hint">The URBAN-SYNAPSE dual-model architecture: U-Net for semantic segmentation and YOLOv8 for oriented bounding-box detection, combined through morphological post-processing.</p>
+  {% for fig in figures %}
+    {% if fig.filename == "pipeline_overview.png" %}
+    <div class="analytics-full">
+      <figure class="analytics-figure">
+        <a href="{{ fig.url }}"><img src="{{ fig.url }}" alt="{{ fig.label }}"></a>
+        <figcaption>{{ fig.label }}</figcaption>
+      </figure>
+    </div>
+    {% endif %}
+  {% endfor %}
+</section>
+
+{# --- U-Net Section --- #}
+<section class="panel analytics-section">
+  <h2>🧠 U-Net Segmentation Analytics</h2>
+  <p class="hint">Architecture details, checkpoint metadata, and learned weight distributions for the semantic segmentation model trained on ISPRS Potsdam (6 classes).</p>
+  <div class="analytics-grid">
+    {% for fig in figures %}
+      {% if fig.filename.startswith("unet_") %}
+      <figure class="analytics-figure {{ 'wide' if 'weight' in fig.filename or 'architecture' in fig.filename else '' }}">
+        <a href="{{ fig.url }}"><img src="{{ fig.url }}" alt="{{ fig.label }}"></a>
+        <figcaption>{{ fig.label }}</figcaption>
+      </figure>
+      {% endif %}
+    {% endfor %}
+  </div>
+</section>
+
+{# --- YOLO Section --- #}
+<section class="panel analytics-section">
+  <h2>🎯 YOLOv8 OBB Detection Analytics</h2>
+  <p class="hint">Training dynamics for the oriented bounding-box vehicle detector trained on the VSAI dataset (30 epochs, patience 20).</p>
+  <div class="analytics-grid">
+    {% for fig in figures %}
+      {% if fig.filename.startswith("yolo_") %}
+      <figure class="analytics-figure {{ 'wide' if 'loss' in fig.filename or 'metrics' in fig.filename else '' }}">
+        <a href="{{ fig.url }}"><img src="{{ fig.url }}" alt="{{ fig.label }}"></a>
+        <figcaption>{{ fig.label }}</figcaption>
+      </figure>
+      {% endif %}
+    {% endfor %}
+  </div>
+</section>
+
+{# --- Mixed Plots Section --- #}
+<section class="panel analytics-section">
+  <h2>🔗 Model Comparison & Mixed Analytics</h2>
+  <p class="hint">Overlaid metrics comparing convergence and performance of the U-Net and YOLOv8 models.</p>
+  <div class="analytics-grid">
+    {% for fig in figures %}
+      {% if fig.filename.startswith("mixed_") %}
+      <figure class="analytics-figure wide">
+        <a href="{{ fig.url }}"><img src="{{ fig.url }}" alt="{{ fig.label }}"></a>
+        <figcaption>{{ fig.label }}</figcaption>
+      </figure>
+      {% endif %}
+    {% endfor %}
+  </div>
+</section>
+
+{% endif %}
+{% endblock %}
