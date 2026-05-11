@@ -2,18 +2,18 @@
 
 ![Python](https://img.shields.io/badge/python-3.12-blue.svg)
 ![PyTorch](https://img.shields.io/badge/PyTorch-ROCm-ee4c2c.svg)
-![License](https://img.shields.io/badge/license-MIT-green.svg)
+
 
 A production-ready dual-model pipeline for **semantic segmentation** and **object detection** on aerial/drone imagery using a combination of **U-Net** and **YOLOv8 OBB** models. Detect pedestrians, buildings, roads, vehicles, and vegetation in high-resolution aerial images with a browser-based Flask UI.
 
 **Key Features:**
-- 🎯 **Dual-Model Pipeline**: U-Net for 6-class semantic segmentation + YOLOv8 OBB for oriented vehicle detection
-- 🔄 **Morphological Post-Processing**: Automated cleanup of segmentation masks using shape filtering and overlap heuristics
-- 🌍 **ROCm Support**: Full compatibility with AMD GPUs (tested on RX 6700S gfx1032)
-- 🐳 **Docker Ready**: Isolated environment with GPU passthrough
-- 📊 **Web UI**: Interactive Flask application for upload, inference, and result visualization
-- ⚡ **Production Inference**: Batch processing with uncertainty quantification
-- 🧪 **Comprehensive Tests**: Unit tests, integration tests, and hardware validation
+- **Dual-Model Pipeline**: U-Net for 6-class semantic segmentation + YOLOv8 OBB for oriented vehicle detection
+- **Morphological Post-Processing**: Automated cleanup of segmentation masks using shape filtering and overlap heuristics
+- **ROCm Support**: Full compatibility with AMD GPUs (tested on RX 6700S gfx1032)
+- **Docker Ready**: Isolated environment with GPU passthrough
+- **Web UI**: Interactive Flask application for upload, inference, and result visualization
+- **Production Inference**: Batch processing with uncertainty quantification
+- **Comprehensive Tests**: Unit tests, integration tests, and hardware validation
 
 ---
 
@@ -224,7 +224,7 @@ train_loader, val_loader = get_dataloaders(cfg=cfg)
 
 ### U-Net Training
 
-**Overview**: Pure PyTorch implementation with mixed precision (AMP), learning rate scheduling, and early stopping.
+**Overview**: Pure PyTorch implementation with learning rate scheduling and early stopping.
 
 #### Basic Training
 
@@ -251,7 +251,6 @@ python -m train.train_unet --resume results/unet/checkpoints/best.pth
 Resumes:
 - Model weights + optimizer state
 - Learning rate scheduler state
-- GradScaler state (for AMP)
 - Epoch counter and best validation loss
 
 #### Advanced Options
@@ -343,49 +342,6 @@ python infer.py \
     --output /custom/output/dir
 ```
 
-**Output Artifacts** (written to `results/inference/`):
-
-| File | Description | Format |
-|------|-------------|--------|
-| `result.png` | Composite: mask overlay + OBB boxes + labels | PNG |
-| `mask.png` | Colorized semantic segmentation (6 classes) | PNG |
-| `mask_raw.png` | Raw U-Net output (before post-processing) | PNG |
-| `mask_diff.png` | Heatmap: pixels changed by post-processing | PNG |
-| `uncertainty.png` | Per-pixel Shannon entropy (normalized by log(6)) | Colormap PNG |
-| `detections.json` | YOLO OBB results (class, confidence, 4 corners) | JSON |
-| `morph_stats.json` | Post-processing statistics | JSON |
-
-### Python API
-
-```python
-from inference.pipeline import run_inference
-from utils.cfg import load_config
-
-cfg = load_config("config.yaml")
-results = run_inference(
-    image_path="sample.jpg",
-    cfg=cfg,
-    output_dir="my_results/"
-)
-
-print(results)
-# {
-#     'result': '/path/to/result.png',
-#     'mask': '/path/to/mask.png',
-#     'uncertainty': '/path/to/uncertainty.png',
-#     'detections': '/path/to/detections.json',
-#     'morph_stats': '/path/to/morph_stats.json',
-#     ...
-# }
-```
-
-### Soft Failures
-
-- **Missing U-Net weights**: Uses random initialization (logs warning)
-- **Missing YOLO weights**: Returns empty detections (mask-only result)
-- **Image load error**: Raises `FileNotFoundError` with path info
-
-This ensures the pipeline is robust for partial deployments.
 
 ---
 
@@ -478,26 +434,6 @@ Open http://127.0.0.1:5000/
 #### Raw Outputs
 - Download `detections.json`, `mask.png`, `uncertainty.png`, etc.
 
-### Configuration
-
-Set environment variables before launch:
-
-```bash
-# Maximum upload size in MB (default: 50)
-export MAX_UPLOAD_MB=100
-
-# Keep uploads across restarts (default: delete on start)
-export WEB_KEEP_UPLOADS_ON_START=1
-
-gunicorn -w 1 -b 0.0.0.0:5000 'web.app:create_app()'
-```
-
-### Deployment Notes
-
-- **Single Worker**: Always use `-w 1` to prevent GPU memory conflicts
-- **Caching**: Upload directory clears on startup unless `WEB_KEEP_UPLOADS_ON_START=1`
-- **HTTP Redirects**: 303 See Other after successful POST (prevents form replay)
-- **Cache Control**: Result pages use `no-store, private` headers
 
 ---
 
@@ -710,10 +646,10 @@ device = get_device()  # Returns torch.device('cuda') or 'cpu'
 
 | GPU | Driver | ROCm | Status |
 |-----|--------|------|--------|
-| RX 6700S (gfx1032) | amdgpu | 6.2 | ✅ Tested |
-| RX 6800 (gfx1030) | amdgpu | 6.2 | ✅ Expected |
-| NVIDIA A100 (CUDA) | nvidia-driver | 12.x | ✅ Supported |
-| CPU (no GPU) | — | — | ✅ Fallback |
+| RX 6700S (gfx1032) | amdgpu | 6.2 | Tested |
+| RX 6800 (gfx1030) | amdgpu | 6.2 | Expected |
+| NVIDIA A100 (CUDA) | nvidia-driver | 12.x | Supported |
+| CPU (no GPU) | — | — | Fallback |
 
 ### Memory Requirements
 
@@ -725,100 +661,6 @@ device = get_device()  # Returns torch.device('cuda') or 'cpu'
 | Both simultaneously | N/A | 16 GB |
 
 **Note**: ROCm's managed memory can use host RAM as overflow; behavior varies by driver version.
-
----
-
-## Troubleshooting
-
-### Common Issues
-
-#### ImportError: No module named 'cv2'
-
-```bash
-pip install opencv-python-headless
-# OR reinstall both requirement files
-pip install -r requirements.txt -r requirements-web.txt
-```
-
-#### HSA_OVERRIDE_GFX_VERSION not set (ROCm error)
-
-```
-HIP_CALL( hipDeviceGetAttribute( &defaultGfxVersion, hipDeviceAttributeGcnArchName, device) )
-hipErrorInitializationError error !!!
-```
-
-**Fix**: Ensure `apply_hsa_override()` runs **before** torch import:
-
-```python
-from utils.device import apply_hsa_override  # MUST be first import
-apply_hsa_override()
-# Now safe to import torch
-import torch
-```
-
-#### GPU Memory Error during Training
-
-```
-RuntimeError: CUDA out of memory. Tried to allocate ...
-```
-
-**Solutions** (in order of impact):
-1. Reduce batch size: `--batch-size 2` (U-Net) or `--batch 4` (YOLO)
-2. Reduce image size: `--image-size 384 384` (U-Net)
-3. Reduce num_workers: `--num-workers 2`
-4. Enable mixed precision: `--amp` (often enabled by default)
-5. Close background applications
-6. Use Python 3.11 instead of 3.12 (torch.compile issues)
-
-#### Dataset not downloading / Kagglehub error
-
-```
-kagglehub.exceptions.ApiHTTPError: 401 -- Unauthorized
-```
-
-**Fix**: Log in to Kaggle:
-
-```bash
-pip install kaggle
-kaggle auth login
-# Follow prompts to generate API key
-```
-
-#### Model weights not found at inference time
-
-```
-[infer] no U-Net weights at ... -- using random init
-[infer] no YOLO weights at ... -- returning empty detections
-```
-
-**Expected behavior**: Pipeline gracefully degrades. To use specific weights:
-
-```bash
-python infer.py \
-    --image sample.jpg \
-    --unet-weights results/unet/checkpoints/best.pth \
-    --yolo-weights results/yolo/train/weights/best.pt
-```
-
-#### Docker GPU passthrough not working
-
-```bash
-# Verify GPU is visible
-./docker-run.sh nvidia-smi  # NVIDIA
-./docker-run.sh rocm-smi    # AMD
-
-# Rebuild image
-./docker-run.sh --rebuild
-```
-
-#### Web UI uploads not persisting
-
-```bash
-export WEB_KEEP_UPLOADS_ON_START=1
-flask --app web.app:create_app run
-```
-
-By default, `web/uploads/` is cleared on every Flask restart.
 
 ---
 
@@ -925,47 +767,3 @@ aerial-image-segmentation/
 - [ROCm](https://rocmdocs.amd.com/) — AMD GPU support
 
 ---
-
-## Contributing
-
-Contributions welcome! Please:
-
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/my-feature`
-3. Commit changes: `git commit -m "Add my feature"`
-4. Push branch: `git push origin feature/my-feature`
-5. Submit pull request
-
-### Code Style
-
-- Follow [PEP 8](https://pep8.org/)
-- Use type hints for function signatures
-- Document modules and classes with docstrings
-- Run tests before submitting: `pytest`
-
----
-
-## License
-
-MIT License — See [LICENSE](LICENSE) file for details.
-
-**Attribution**: Built as a deep learning research project combining ISPRS Potsdam and VSAI datasets.
-
----
-
-## Support
-
-For issues, questions, or suggestions:
-
-1. Check [Troubleshooting](#troubleshooting) section
-2. Review existing [GitHub Issues](https://github.com/ml3m/aerial-image-segmentation/issues)
-3. Open a new issue with:
-   - System info (OS, Python, GPU model)
-   - Error message + stack trace
-   - Minimal reproducible example
-   - Steps to reproduce
-
----
-
-**Last Updated**: May 2026  
-**Status**: ✅ Production-Ready
