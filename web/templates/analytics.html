@@ -16,7 +16,7 @@
 
 {# --- Pipeline Overview --- #}
 <section class="panel analytics-section">
-  <h2>🔗 Pipeline Overview</h2>
+  <h2> Pipeline Overview</h2>
   <p class="hint">The URBAN-SYNAPSE dual-model architecture: U-Net for semantic segmentation and YOLOv8 for oriented bounding-box detection, combined through morphological post-processing.</p>
   {% for fig in figures %}
     {% if fig.filename == "pipeline_overview.png" %}
@@ -32,7 +32,7 @@
 
 {# --- U-Net Section --- #}
 <section class="panel analytics-section">
-  <h2>🧠 U-Net Segmentation Analytics</h2>
+  <h2> U-Net Segmentation Analytics</h2>
   <p class="hint">Architecture details, checkpoint metadata, and learned weight distributions for the semantic segmentation model trained on ISPRS Potsdam (6 classes).</p>
   <div class="analytics-grid">
     {% for fig in figures %}
@@ -48,7 +48,7 @@
 
 {# --- YOLO Section --- #}
 <section class="panel analytics-section">
-  <h2>🎯 YOLOv8 OBB Detection Analytics</h2>
+  <h2> YOLOv8 OBB Detection Analytics</h2>
   <p class="hint">Training dynamics for the oriented bounding-box vehicle detector trained on the VSAI dataset (30 epochs, patience 20).</p>
   <div class="analytics-grid">
     {% for fig in figures %}
@@ -64,7 +64,7 @@
 
 {# --- Mixed Plots Section --- #}
 <section class="panel analytics-section">
-  <h2>🔗 Model Comparison & Mixed Analytics</h2>
+  <h2> Model Comparison & Mixed Analytics</h2>
   <p class="hint">Overlaid metrics comparing convergence and performance of the U-Net and YOLOv8 models.</p>
   <div class="analytics-grid">
     {% for fig in figures %}
